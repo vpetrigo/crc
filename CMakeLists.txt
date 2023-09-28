@@ -43,5 +43,4 @@ if (CRC_TESTS)
 
     add_executable(${PROJECT_NAME}_test ${SOURCE_CPP_TEST})
     target_link_libraries(${PROJECT_NAME}_test PUBLIC ${PROJECT_NAME})
-
 endif()
