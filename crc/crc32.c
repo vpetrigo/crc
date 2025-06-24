@@ -71,12 +71,16 @@ static uint32_t crc32_tab[] =
 /* crc32 hash */
 uint32_t crc32(const unsigned char *s, size_t len)
 {
-    int i;
-    uint32_t crc32val = 0;
+    return crc32_update(0, s, len);
+}
+
+uint32_t crc32_update(const uint32_t crc, const unsigned char *buf, const size_t len)
+{
+    uint32_t crc32val = crc;
     crc32val ^= 0xFFFFFFFF;
 
-    for (i = 0;  i < len;  i++) {
-        crc32val = crc32_tab[(crc32val ^ s[i]) & 0xFF] ^ ((crc32val >> 8) & 0x00FFFFFF);
+    for (size_t i = 0;  i < len;  i++) {
+        crc32val = crc32_tab[(crc32val ^ buf[i]) & 0xFF] ^ ((crc32val >> 8) & 0x00FFFFFF);
     }
 
     return crc32val ^ 0xFFFFFFFF;
