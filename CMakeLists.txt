@@ -4,7 +4,7 @@ else()
   set(CRC_LIBRARY 1)
 endif()
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.21)
 project(crc)
 
 if(TARGET ${PROJECT_NAME})

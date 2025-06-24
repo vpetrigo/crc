@@ -11,6 +11,7 @@
 #include "crc/crc32.h"
 #include "crc/crc64.h"
 #include "crc/crc_poly.h"
+#include <array>
 #include <cstring>
 
 TEST(CRC8Test, BasicTest)
@@ -46,6 +47,21 @@ TEST(CRC32Test, BasicTest)
     uint32_t expect = 0xCBF43926;
 
     EXPECT_EQ(crc32(reinterpret_cast<const unsigned char *>(inData), 9), expect);
+}
+
+TEST(CRC32Test, UpdateTest)
+{
+    constexpr std::array<const unsigned char, 9> inData = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    uint32_t expect = 0xCBF43926;
+    const size_t increment = inData.size() / 3;
+    uint32_t crc = 0;
+
+    for (size_t i = 0; i < inData.size(); i += increment) {
+        crc = crc32_update(crc, inData.data() + i, increment);
+    }
+
+    EXPECT_EQ(crc32(inData.data(), inData.size()), expect);
+    EXPECT_EQ(crc, expect);
 }
 
 TEST(CRC64Test, BasicTest)
