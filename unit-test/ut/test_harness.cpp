@@ -91,8 +91,7 @@ namespace common {
     }
 }  // namespace common
 
-using namespace common::test;
 int main(int argc, char** argv) {
-    common::test::RunAllTests(NULL);
+    common::test::RunAllTests(nullptr);
     return 0;
 }
