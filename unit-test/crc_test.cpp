@@ -12,7 +12,30 @@
 #include "crc/crc64.h"
 #include "crc/crc_poly.h"
 #include <array>
+#include <vector>
 #include <cstring>
+
+std::vector<unsigned char> to_array(const char *str)
+{
+    std::vector<unsigned char> arr;
+
+    for (size_t i = 0; str[i] != '\0'; ++i) {
+        arr.push_back(str[i]);
+    }
+
+    return arr;
+}
+
+std::vector<unsigned char> to_array(const char *str, const size_t str_size)
+{
+    std::vector<unsigned char> arr;
+
+    for (size_t i = 0; i < str_size; ++i) {
+        arr.push_back(str[i]);
+    }
+
+    return arr;
+}
 
 TEST(CRC8Test, BasicTest)
 {
@@ -31,6 +54,38 @@ TEST(CRC8Test, BasicTest)
 
     expect = 0x1a;
     EXPECT_EQ(crc8_lsb(buffer, sizeof(buffer)), expect);
+}
+
+TEST(CRC8Test, UpdateTest)
+{
+    struct TestCase {
+        std::vector<unsigned char> in_data;
+        uint8_t expect;
+    };
+
+    const std::array test_cases_msb{
+        TestCase{to_array("123456789"), 0xa2,},
+        TestCase{to_array("Hello World!!!"), 0x68,},
+    };
+
+    const std::array test_cases_lsb{
+        TestCase{to_array("Hello World!!!"), 0x2c,},
+        TestCase{to_array("\xb0\x00\x00\x00\x00\x00\x00", 7), 0x1a,},
+    };
+
+    for (const auto&[in_data, expect] : test_cases_msb) {
+        const size_t total = in_data.size();
+        uint8_t crc = crc8_msb(in_data.data(), total / 2);
+        crc = crc8_msb_update(crc, in_data.data() + total / 2, total - total / 2);
+        EXPECT_EQ(crc, expect);
+    }
+
+    for (const auto&[in_data, expect] : test_cases_lsb) {
+        const size_t total = in_data.size();
+        uint8_t crc = crc8_lsb(in_data.data(), total / 2);
+        crc = crc8_lsb_update(crc, in_data.data() + total / 2, total - total / 2);
+        EXPECT_EQ(crc, expect);
+    }
 }
 
 TEST(CRC16Test, BasicTest)
