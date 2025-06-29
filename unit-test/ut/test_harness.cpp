@@ -76,7 +76,7 @@ TestPerfomence::TestPerfomence()
 TestPerfomence::TestPerfomence(int size)
 {
     startMs_ = NowMs();
-    fprintf(stderr, "\033[0;32m[ RUN      ] ==== start to run %lu cases.\n",
+    fprintf(stderr, "\033[0;32m[ RUN      ] ==== start to run %d cases.\n",
             size);
 }
 TestPerfomence::~TestPerfomence()
