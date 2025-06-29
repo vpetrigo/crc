@@ -10,10 +10,9 @@
 **    Poly                       : 0xedb88320
 **    Output for "123456789"     : 0xCBF43926
 */
-#include <stdlib.h>
 #include "crc32.h"
-static uint32_t crc32_tab[] =
-{
+#include <stdlib.h>
+static uint32_t crc32_tab[] = {
     0x00000000L, 0x77073096L, 0xee0e612cL, 0x990951baL, 0x076dc419L,
     0x706af48fL, 0xe963a535L, 0x9e6495a3L, 0x0edb8832L, 0x79dcb8a4L,
     0xe0d5e91eL, 0x97d2d988L, 0x09b64c2bL, 0x7eb17cbdL, 0xe7b82d07L,
@@ -65,7 +64,7 @@ static uint32_t crc32_tab[] =
     0xbdbdf21cL, 0xcabac28aL, 0x53b39330L, 0x24b4a3a6L, 0xbad03605L,
     0xcdd70693L, 0x54de5729L, 0x23d967bfL, 0xb3667a2eL, 0xc4614ab8L,
     0x5d681b02L, 0x2a6f2b94L, 0xb40bbe37L, 0xc30c8ea1L, 0x5a05df1bL,
-    0x2d02ef8dL
+    0x2d02ef8dL,
 };
 
 /* crc32 hash */
@@ -74,13 +73,15 @@ uint32_t crc32(const unsigned char *s, size_t len)
     return crc32_update(0, s, len);
 }
 
-uint32_t crc32_update(const uint32_t crc, const unsigned char *buf, const size_t len)
+uint32_t crc32_update(const uint32_t crc, const unsigned char *buf,
+                      const size_t len)
 {
     uint32_t crc32val = crc;
     crc32val ^= 0xFFFFFFFF;
 
-    for (size_t i = 0;  i < len;  i++) {
-        crc32val = crc32_tab[(crc32val ^ buf[i]) & 0xFF] ^ ((crc32val >> 8) & 0x00FFFFFF);
+    for (size_t i = 0; i < len; i++) {
+        crc32val = crc32_tab[(crc32val ^ buf[i]) & 0xFF] ^
+                   ((crc32val >> 8) & 0x00FFFFFF);
     }
 
     return crc32val ^ 0xFFFFFFFF;

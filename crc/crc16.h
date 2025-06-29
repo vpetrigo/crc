@@ -1,5 +1,4 @@
-#ifndef _CRC_CRC16_H
-#define _CRC_CRC16_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,4 +12,3 @@ uint16_t crc16(const unsigned char *buf, size_t len);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus  */
-#endif

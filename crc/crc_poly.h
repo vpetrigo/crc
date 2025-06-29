@@ -1,5 +1,4 @@
-#ifndef _CRC_CRC_POLY_H
-#define _CRC_CRC_POLY_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,4 +27,3 @@ uint64_t crc64_poly(uint64_t poly, uint16_t value);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus  */
-#endif // _CRC_CRC_POLY_H

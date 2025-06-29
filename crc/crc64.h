@@ -1,5 +1,4 @@
-#ifndef _CRC_CRC64_H
-#define _CRC_CRC64_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,4 +12,3 @@ uint64_t crc64(const unsigned char *s, size_t l);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus  */
-#endif

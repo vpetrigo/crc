@@ -1,5 +1,4 @@
-#ifndef _CRC_CRC8_H
-#define _CRC_CRC8_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,4 +18,3 @@ uint8_t crc8_msb(const unsigned char *buf, size_t len);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus  */
-#endif

@@ -1,5 +1,4 @@
-#ifndef _CRC_CRC32_H
-#define _CRC_CRC32_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,4 +13,3 @@ uint32_t crc32_update(uint32_t crc, const unsigned char *buf, size_t len);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus  */
-#endif
