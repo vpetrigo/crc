@@ -50,9 +50,14 @@ static const uint16_t crc16tab[256] = {
 
 uint16_t crc16(const unsigned char *buf, size_t len)
 {
-    int counter;
-    uint16_t crc = 0;
-    for (counter = 0; counter < len; counter++)
+    return crc16_update(0, buf, len);
+}
+
+uint16_t crc16_update(uint16_t crc, const unsigned char *buf, const size_t len)
+{
+    for (size_t counter = 0; counter < len; ++counter) {
         crc = (crc << 8) ^ crc16tab[((crc >> 8) ^ *buf++) & 0x00FF];
+    }
+
     return crc;
 }

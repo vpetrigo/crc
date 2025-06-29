@@ -15,6 +15,11 @@
 #include <cstring>
 #include <vector>
 
+struct TestCase {
+    std::vector<unsigned char> in_data;
+    uint64_t expect;
+};
+
 std::vector<unsigned char> to_array(const char *str)
 {
     std::vector<unsigned char> arr;
@@ -63,11 +68,6 @@ TEST(CRC8Test, BasicTest)
 
 TEST(CRC8Test, UpdateTest)
 {
-    struct TestCase {
-        std::vector<unsigned char> in_data;
-        uint8_t expect;
-    };
-
     const std::array test_cases_msb{
         TestCase{
             to_array("123456789"),
@@ -114,6 +114,23 @@ TEST(CRC16Test, BasicTest)
 
     EXPECT_EQ(crc16(reinterpret_cast<const unsigned char *>(inData), 9),
               expect);
+}
+
+TEST(CRC16Test, UpdateTest)
+{
+    const std::array test_cases_msb{
+        TestCase{
+            to_array("123456789"),
+            0x31C3,
+        },
+    };
+
+    for (const auto &[in_data, expect] : test_cases_msb) {
+        const size_t total = in_data.size();
+        auto crc = crc16(in_data.data(), total / 2);
+        crc = crc16_update(crc, in_data.data() + total / 2, total - total / 2);
+        EXPECT_EQ(crc, expect);
+    }
 }
 
 TEST(CRC32Test, BasicTest)
