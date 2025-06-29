@@ -167,6 +167,23 @@ TEST(CRC64Test, BasicTest)
               expect);
 }
 
+TEST(CRC64Test, UpdateTest)
+{
+    const std::array test_cases_msb{
+        TestCase{
+            to_array("123456789"),
+            0xe9c6d914c4b8d9ca,
+        },
+    };
+
+    for (const auto &[in_data, expect] : test_cases_msb) {
+        const size_t total = in_data.size();
+        auto crc = crc64(in_data.data(), total / 2);
+        crc = crc64_update(crc, in_data.data() + total / 2, total - total / 2);
+        EXPECT_EQ(crc, expect);
+    }
+}
+
 TEST(CRC8PolyTest, BasicTest)
 {
     uint8_t poly = 0x31;

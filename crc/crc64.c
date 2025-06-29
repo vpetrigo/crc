@@ -128,13 +128,15 @@ static const uint64_t crc64_tab[256] = {
     0x29b7d047efec8728ULL,
 };
 
-uint64_t crc64(const unsigned char *s, size_t l)
+uint64_t crc64(const unsigned char *s, const size_t l)
 {
-    int j = 0;
-    uint64_t crc = 0;
+    return crc64_update(0, s, l);
+}
 
-    for (j = 0; j < l; j++) {
-        uint8_t byte = s[j];
+uint64_t crc64_update(uint64_t crc, const unsigned char *buf, const size_t len)
+{
+    for (size_t i = 0; i < len; ++i) {
+        const uint8_t byte = buf[i];
         crc = crc64_tab[(uint8_t)crc ^ byte] ^ (crc >> 8);
     }
     return crc;
