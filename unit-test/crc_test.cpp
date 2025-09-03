@@ -77,6 +77,10 @@ TEST(CRC8Test, UpdateTest)
             to_array("Hello World!!!"),
             0x68,
         },
+        TestCase{
+            to_array("Test Test Test 123"),
+            0x4C,
+        },
     };
 
     const std::array test_cases_lsb{
@@ -135,11 +139,58 @@ TEST(CRC16Test, UpdateTest)
 
 TEST(CRC32Test, BasicTest)
 {
-    const char *inData = "123456789";
-    uint32_t expect = 0xCBF43926;
+    {
+        const char *inData = "123456789";
+        uint32_t expect = 0xCBF43926;
 
-    EXPECT_EQ(crc32(reinterpret_cast<const unsigned char *>(inData), 9),
-              expect);
+        EXPECT_EQ(crc32(reinterpret_cast<const unsigned char *>(inData),
+                        strlen(inData)),
+                  expect);
+    }
+
+    {
+        const char *inData = "987654321";
+        uint32_t expect = 0x015F0201;
+
+        EXPECT_EQ(crc32(reinterpret_cast<const unsigned char *>(inData),
+                        strlen(inData)),
+                  expect);
+    }
+
+    {
+        const char *inData = "Hello World!";
+        uint32_t expect = 0x1C291CA3;
+
+        EXPECT_EQ(crc32(reinterpret_cast<const unsigned char *>(inData),
+                        strlen(inData)),
+                  expect);
+    }
+
+    {
+        const uint32_t data[] = {
+            0x00000000, 0x00000000, 0x01010000, 0x00000000, 0x00000101,
+            0x01010001, 0x4B5A640A, 0x000A1932, 0x00010101, 0x0A010100,
+            0x00000101, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+            0x00000000, 0x004B0050, 0x00410046, 0x0037003C, 0x002D0032,
+            0x00230028, 0x0019001E, 0x000F0014, 0x0005000A, 0xFFFB0000,
+            0xFFF1FFF6, 0xFFE7FFEC, 0xFFDDFFE2, 0xFFD3FFD8, 0x00C300C8,
+            0x00B900BE, 0x00AF00B4, 0x00A500AA, 0x009B00A0, 0x00910096,
+            0x0087008C, 0x007D0082, 0x00730078, 0x0069006E, 0x005F0064,
+            0x0055005A, 0x004B0050, 0x00410046, 0x0037003C, 0x002D0032,
+            0x00230028, 0x0019001E, 0x000F0014, 0x0005000A, 0xFFFB0000,
+            0xFFF1FFF6, 0xFFE7FFEC, 0xFFDDFFE2, 0x10CCFFD8, 0x000003E8,
+            0x03E80000, 0x00200FA0, 0x00040040, 0x439E8CCD, 0x43B78000,
+            0x43D53333, 0x43F8A666};
+        unsigned char in_data[sizeof(data)] = {0};
+
+        for (size_t i = 0; i < sizeof(in_data); ++i) {
+            in_data[i] = (data[i / 4] >> (8 * (i % 4))) & 0xFF;
+        }
+        uint32_t expect = 0x7C0F608F;
+        EXPECT_EQ(crc32(reinterpret_cast<const unsigned char *>(in_data),
+                        sizeof(in_data)),
+                  expect);
+    }
 }
 
 TEST(CRC32Test, UpdateTest)
